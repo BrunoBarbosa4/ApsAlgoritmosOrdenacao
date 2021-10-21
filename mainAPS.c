@@ -35,6 +35,8 @@ int main(int argc, char *argv[]) {
 	
 	int escolha = -1;
 	
+	system("color 0a");//Deixa a cor da fonte verde
+	
 	// Escolhendo se o usuário que irá digitar os números ou serão gerados aleatoriamente.
 	while (escolha < 0 || escolha > 1) {
 		printf("Para começar você deve escolher se os números serão aleatórios, ou você que irá digitá-los: (Obs: Escolha 0 ou 1)");
@@ -87,7 +89,7 @@ int main(int argc, char *argv[]) {
 	    
 	    case 2 :
 		    printf ("\nMétodo QuickSort\n");
-		    quickSort(0, tamanhoVetor - 1); //Seleciono o primeiro elemento do vetor até o último
+		    quickSort(numeros, 0, tamanhoVetor - 1); //Seleciono o primeiro elemento do vetor até o último
 		    break;
 	    
 	    case 3 :
@@ -107,12 +109,12 @@ int main(int argc, char *argv[]) {
 	    
 	    case 6 :
 		    printf ("\nMétodo HeapSort\n");
-		    heapSort();
+		    heapSort(numeros, tamanhoVetor);
 		    break;
 	    
 	    case 7 :
 		    printf ("\nMétodo MergeSort\n");
-		    mergeSort();
+		    mergeSort(numeros, 0, tamanhoVetor - 1);
 		    break;
 	    
 	    case 8 :
@@ -129,7 +131,6 @@ int main(int argc, char *argv[]) {
 	}
 	
 	if(escolha != 9){
-		printf("\nescolha != 9\n");
 		gettimeofday(&fim, 0);
 		listarNumeros();
 		printf("\n\nTempo de execução: %f milissegundos (sem a parte de printar)\n", diferenca(inicio, fim));
@@ -145,7 +146,7 @@ int geraNumeros() {
 	
 	numeros = (int *)malloc(tamanhoVetor * sizeof(int));
 	
-	srand(time(NULL));//srand(314159976);
+	srand(314159976);//srand(time(NULL));//srand(314159976);
 	int valorMaximo = 1000;//Os números aleatórios serão gerados de 0 até 100
 	for (int i = 0; i < tamanhoVetor; i++){
 		numeros[i] = rand() % valorMaximo + 1;
@@ -203,7 +204,7 @@ void bubbleSort(){
 	}while(!ordenada);
 }
 
-void quickSort(int comeco, int fim) {
+void quickSort(int *numeros, int comeco, int fim) {
      
     int contEsquerda = comeco;
     int contDireita = fim;
@@ -224,10 +225,10 @@ void quickSort(int comeco, int fim) {
     }
      
     if(contDireita > comeco) {
-        quickSort(comeco, contDireita);
+        quickSort(numeros, comeco, contDireita);
     }
     if(contEsquerda < fim) {
-        quickSort(contEsquerda, fim);
+        quickSort(numeros, contEsquerda, fim);
     }
 }
 
@@ -273,16 +274,93 @@ void selectionSort(){
 	}
 }
 
-void heapSort(){
+void heapSort(int *numeros, int tamanhoVetor){
+	int i = tamanhoVetor / 2;
+	int aux;
 	
-	
+   while(true) {
+      if (i > 0) {
+          i--;
+          aux = numeros[i];
+      } else {
+          tamanhoVetor--;
+          if (tamanhoVetor <= 0) return;
+          aux = numeros[tamanhoVetor];
+          numeros[tamanhoVetor] = numeros[0];
+      }
+      
+      int posicaoPai = i;
+      int posicaoFilho = i * 2 + 1;
+      while (posicaoFilho < tamanhoVetor) {
+      	
+          if ((posicaoFilho + 1 < tamanhoVetor)  &&  (numeros[posicaoFilho + 1] > numeros[posicaoFilho]))//Compara qual dos filhos é o maior
+              posicaoFilho++;
+              
+          if (numeros[posicaoFilho] > aux) {//Compara se o maior dos filhos é maior que o pai
+          	
+             numeros[posicaoPai] = numeros[posicaoFilho];
+             posicaoPai = posicaoFilho;
+             posicaoFilho = posicaoPai * 2 + 1;
+             
+          } else {
+             break;
+          }
+      }
+      
+      numeros[posicaoPai] = aux;
+   }
 	
 }
 
-void mergeSort(){
+void mergeSort(int *numeros, int inicio, int final){
+	if (inicio < final) {
+        int meio = (final + inicio) / 2;
+
+        mergeSort(numeros, inicio, meio);
+        mergeSort(numeros, meio + 1, final);
+        merge(numeros, inicio, meio, final);
+    }
 	
-	
-	
+}
+
+void merge(int *numeros, int inicio, int meio, int final) {
+	int tamanho = final - inicio + 1;
+    int indiceParte1 = inicio;
+	int indiceParte2 = meio + 1;
+	int indiceAuxiliar = 0;
+    int *vetorAuxiliar;
+    vetorAuxiliar = (int*)malloc(tamanho * sizeof(int));
+
+    while((indiceParte1 <= meio) && (indiceParte2 <= final)){//Roda enquanto o início1 e o início2 estiverem dentro dos limites, meio e final respectivamente
+        if(numeros[indiceParte1] < numeros[indiceParte2]) {//Compara qual dos dois números (numeros[indiceParte1] e numeros[indiceParte2]) é o menor
+            vetorAuxiliar[indiceAuxiliar] = numeros[indiceParte1];//Se o numeros[indiceParte1] for menor, então ele é colocado no vetor auxiliar
+            indiceParte1++;//incrementa para que, na próxima comparação ele comparar com o próximo da parte do indiceParte1 (início para o meio)
+        }
+		else {
+            vetorAuxiliar[indiceAuxiliar] = numeros[indiceParte2];//Se o numeros[indiceParte2] for menor, então ele é colocado no vetor auxiliar
+            indiceParte2++;//incrementa para que, na próxima comparação ele comparar com o próximo da parte do indiceParte2 (meio para o fim)
+        }
+        indiceAuxiliar++;
+    }
+
+    while(indiceParte1 <= meio){//Verifica se a parte1 (início para o meio) ainda tem elementos 
+        vetorAuxiliar[indiceAuxiliar] = numeros[indiceParte1];
+        indiceAuxiliar++;
+        indiceParte1++;
+    }
+
+    while(indiceParte2 <= final) {//Verifica se a parte2 (meio para o fim) ainda tem elementos 
+        vetorAuxiliar[indiceAuxiliar] = numeros[indiceParte2];
+        indiceAuxiliar++;
+        indiceParte2++;
+    }
+
+	//Copia os elementos já organizados do vetor auxiliar para o vetor numeros
+    for(indiceAuxiliar = inicio; indiceAuxiliar <= final; indiceAuxiliar++){
+        numeros[indiceAuxiliar] = vetorAuxiliar[indiceAuxiliar - inicio];
+    }
+    
+    free(vetorAuxiliar);//Libera o vetor auxiliar
 }
 
 void bucketSort(int *numeros, int tamanhoVetor){
@@ -300,8 +378,7 @@ void bucketSort(int *numeros, int tamanhoVetor){
 	}
 	
 	//Declarando os baldes
-	int qtdBaldes = 10;//(tamanhoVetor / TAMANHO_BALDE);//(maior - menor) / TAMANHO_BALDE + 1;
-	//printf("qtdBaldes: %d", qtdBaldes);
+	int qtdBaldes = 10;
 	balde baldes[qtdBaldes];
 	for(int i = 0; i < qtdBaldes; i++){
 		baldes[i].itens = (int*)malloc(sizeof(int) * tamanhoVetor);//os baldes tem a capacidade do tamanho do vetor
@@ -311,26 +388,18 @@ void bucketSort(int *numeros, int tamanhoVetor){
 	//Separa nos baldes
 	int posicaoBalde;
 	for(int i = 0; i < tamanhoVetor; i++){
-		//posicaoBalde = (numeros[i] - menor) / TAMANHO_BALDE;//Escolhe o balde que o valor será colocado
-		//posicaoBalde = (numeros[i] / (tamanhoVetor / qtdBaldes)) - (qtdBaldes);//Escolhe o balde que o valor será colocado
 		
-		int j = (qtdBaldes) - 1;
-		while(j >= 0){
-			//if(j < 0)
-			//break;
-			//j * (tamanhoVetor / qtdBaldes)
-			if(numeros[i] >= j * (maior / qtdBaldes)){//numeros[i] >= j * 1
-				baldes[j].itens[baldes[j].qtdItens] = numeros[i];//j == posicaoBalde
-				baldes[j].qtdItens++;//Aumenta a quantidade de itens para poder colcoar o próximo no local correto
+		int posicaoBalde = (qtdBaldes) - 1;
+		while(posicaoBalde >= 0){
+			
+			if(numeros[posicaoBalde] >= posicaoBalde * (maior / qtdBaldes)){
+				baldes[posicaoBalde].itens[baldes[posicaoBalde].qtdItens] = numeros[i];
+				baldes[posicaoBalde].qtdItens++;//Aumenta a quantidade de itens para poder colcoar o próximo no local correto
 				break;
 			}
 			
-			j--;
+			posicaoBalde--;
 		}
-		
-		//int posicaoNoBalde = baldes[posicaoBalde].qtdItens;//Esolhe a posição do balde o item vai ficar
-		
-		
 		
 	}
 	
@@ -339,12 +408,6 @@ void bucketSort(int *numeros, int tamanhoVetor){
 	for(int i = 0; i < qtdBaldes; i++){
 		
 		insertionSort(baldes[i].itens, baldes[i].qtdItens);
-		
-		//Teste
-		/*printf("\nBalde #%d: ", i);
-		for(int cont = 0; cont < baldes[i].qtdItens; cont++){
-			printf("%d, ", baldes[i].itens[cont]);
-		}*/
 		
 		for(int j = 0; j < baldes[i].qtdItens; j++){//Coloca cada item do balde no vetor
 			numeros[posicaoBalde] = baldes[i].itens[j];
@@ -377,7 +440,7 @@ void executarTodos(){
 	
 	//QuickSort
 	gettimeofday(&inicio, NULL);
-	quickSort(0, tamanhoVetor - 1);
+	quickSort(numeros, 0, tamanhoVetor - 1);
 	gettimeofday(&fim, NULL);
 	strcpy(algs[1].nome, "QuickSort\t");
 	algs[1].tempoExecucao = diferenca(inicio, fim);
@@ -413,7 +476,7 @@ void executarTodos(){
 	
 	//HeapSort
 	gettimeofday(&inicio, NULL);
-	heapSort();
+	heapSort(numeros, tamanhoVetor);
 	gettimeofday(&fim, NULL);
 	strcpy(algs[5].nome, "HeapSort\t");
 	algs[5].tempoExecucao = diferenca(inicio, fim);
@@ -422,7 +485,7 @@ void executarTodos(){
 	
 	//MergeSort
 	gettimeofday(&inicio, NULL);
-	mergeSort();
+	mergeSort(numeros, 0, tamanhoVetor - 1);
 	gettimeofday(&fim, NULL);
 	strcpy(algs[6].nome, "MergeSort\t");
 	algs[6].tempoExecucao = diferenca(inicio, fim);
@@ -443,11 +506,11 @@ void executarTodos(){
 
 void listarAlgoritmos(algoritmo *algs, int qtdAlgoritmos){
 	printf("\n\nAlgoritmos ordenados pelo tempo de execução: \n");
-	printf("\n\t| Posição | \tAlgoritmo\t |   tempo      |\n");//
+	printf("\n\t| Posição | \tAlgoritmo\t |   tempo\t   |\n");//
 	printf("\t|-----------------------------------------------|\n");
 	for(int i = 0; i < qtdAlgoritmos; i++){
 		//printf(" %d Algoritmo: %s\t tempo: %.2f ms.\n", (i + 1), algs[i].nome, algs[i].tempoExecucao);
-		printf("\t|    %d    | %s\t | %f ms.\t|\n", (i + 1), algs[i].nome, algs[i].tempoExecucao);
+		printf("\t|    %d    | %s\t | %f ms.        |\n", (i + 1), algs[i].nome, algs[i].tempoExecucao);
 	}
 }
 
