@@ -11,7 +11,18 @@
 typedef struct{
 	char nome[20];
 	float tempoExecucao;
-}algoritmo; 
+}algoritmo;
+
+/*typedef struct{//Teste para lista encadeada para o BucketSort
+	int valor;
+	valores *proximo;
+}valores;*/
+
+#define TAMANHO_BALDE 10
+typedef struct{
+	int qtdItens;
+	int itens[TAMANHO_BALDE];
+}balde;
 
 int tamanhoVetor;
 *numeros = NULL;
@@ -86,7 +97,7 @@ int main(int argc, char *argv[]) {
 	    
 	    case 3 :
 		    printf ("\nMétodo InsertionSort\n");
-		    insertionSort();
+		    insertionSort(numeros, tamanhoVetor);
 		    break;
 	    
 	    case 4 :
@@ -111,7 +122,7 @@ int main(int argc, char *argv[]) {
 	    
 	    case 8 :
 		    printf ("\nMétodo BucketSort\n");
-		    bucketSort();
+		    bucketSort(numeros, tamanhoVetor);
 		    break;
 	    
 	    case 9:
@@ -123,6 +134,7 @@ int main(int argc, char *argv[]) {
 	}
 	
 	if(escolha != 9){
+		printf("\nescolha != 9\n");
 		gettimeofday(&fim, 0);
 		listarNumeros();
 		printf("\n\nTempo de execução: %f milissegundos (sem a parte de printar)\n", diferenca(inicio, fim));
@@ -224,22 +236,22 @@ void quickSort(int comeco, int fim) {
     }
 }
 
-void insertionSort(){
+void insertionSort(int *vetor, int tamanhoVetor){
 	int j;
 	int atual;
 	for(int i = 0;i < tamanhoVetor; i++){
-		atual = numeros[i];
+		atual = vetor[i];
 		j = i - 1;
 		
-		while(atual < numeros[j]){
+		while(atual < vetor[j]){
 			if(j < 0){
 				break;
 			}
 			
-			numeros[j + 1] = numeros[j];
+			vetor[j + 1] = vetor[j];
 			j--;
 		}
-		numeros[j + 1] = atual;
+		vetor[j + 1] = atual;
 	}
 }
 
@@ -278,9 +290,82 @@ void mergeSort(){
 	
 }
 
-void bucketSort(){
+void bucketSort(int *numeros, int tamanhoVetor){
 	
+	if(tamanhoVetor < 1)
+		return;
 	
+	int maior = numeros[0];
+	int menor = numeros[0];
+	
+	for(int i = 0; i < tamanhoVetor; i++){//Procra pelo maior e menor valores do vetor
+		int atual = numeros[i];
+		
+		if(atual > maior)
+			maior = atual;
+			
+		if(atual < menor)
+		menor = atual;
+	}
+	
+	//Declarando os baldes
+	int qtdBaldes = (tamanhoVetor / TAMANHO_BALDE) * 2;//(maior - menor) / TAMANHO_BALDE + 1;
+	printf("qtdBaldes: %d", qtdBaldes);
+	balde baldes[qtdBaldes];
+	for(int i = 0; i < qtdBaldes; i++){
+		baldes[i].qtdItens = 0;//colocando a quantidade de itens do balde como 0
+	}
+	
+	//Separa nos baldes
+	int posicaoBalde;
+	for(int i = 0; i < tamanhoVetor; i++){
+		//posicaoBalde = (numeros[i] - menor) / TAMANHO_BALDE;//Escolhe o balde que o valor será colocado
+		//posicaoBalde = (numeros[i] / (tamanhoVetor / qtdBaldes)) - (qtdBaldes);//Escolhe o balde que o valor será colocado
+		
+		int j = (qtdBaldes) - 1;
+		while(1){
+			if(j < 0)
+			break;
+			
+			if(numeros[i] >= j * (tamanhoVetor / qtdBaldes)){//numeros[i] >= j * 1
+				baldes[j].itens[baldes[j].qtdItens] = numeros[i];//j == posicaoBalde
+				baldes[j].qtdItens++;//Aumenta a quantidade de itens para poder colcoar o próximo no local correto
+			}
+			
+			j--;
+		}
+		
+		//int posicaoNoBalde = baldes[posicaoBalde].qtdItens;//Esolhe a posição do balde o item vai ficar
+		
+		
+		
+	}
+	printf("\nBaldes criados!\n");
+	//Teste
+	for(int i = 0; i < qtdBaldes; i++){
+		printf("\nBalde #%d (qtd: %d): ", i, baldes[i].qtdItens);
+		for(int j = 0; j < baldes[i].qtdItens; j++){
+			printf("%d, ", baldes[i].itens[j]);
+		}
+	}
+	
+	//Ordena os itens em cada balde e coloca os baldes no vetor;
+	posicaoBalde = 0;
+	for(int i = 0; i < qtdBaldes; i++){
+		
+		insertionSort(baldes[i].itens, baldes[i].qtdItens);
+		
+		//Teste
+		printf("\nBalde #%d: ", i);
+		for(int cont = 0; cont < baldes[i].qtdItens; cont++){
+			printf("%d, ", baldes[i].itens[cont]);
+		}
+		
+		for(int j = 0; j < baldes[i].qtdItens; j++){//Coloca cada item do balde no vetor
+			numeros[posicaoBalde] = baldes[i].itens[j];
+			posicaoBalde++;
+		}
+	}
 	
 }
 
@@ -314,7 +399,7 @@ void executarTodos(){
 	
 	//InsertionSort
 	gettimeofday(&inicio, NULL);
-	insertionSort();
+	insertionSort(numeros, tamanhoVetor);
 	gettimeofday(&fim, NULL);
 	strcpy(algs[2].nome, "InsertionSort");
 	algs[2].tempoExecucao = diferenca(inicio, fim);
@@ -359,7 +444,7 @@ void executarTodos(){
 	
 	//BucketSort
 	gettimeofday(&inicio, NULL);
-	bucketSort();
+	bucketSort(numeros, tamanhoVetor);
 	gettimeofday(&fim, NULL);
 	strcpy(algs[7].nome, "BucketSort\t");
 	algs[7].tempoExecucao = diferenca(inicio, fim);
