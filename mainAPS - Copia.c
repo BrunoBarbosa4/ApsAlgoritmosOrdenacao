@@ -315,9 +315,9 @@ void bucketSort(int *numeros, int tamanhoVetor){
 		//posicaoBalde = (numeros[i] / (tamanhoVetor / qtdBaldes)) - (qtdBaldes);//Escolhe o balde que o valor será colocado
 		
 		int j = (qtdBaldes) - 1;
-		while(j >= 0){
-			//if(j < 0)
-			//break;
+		while(1){
+			if(j < 0)
+			break;
 			//j * (tamanhoVetor / qtdBaldes)
 			if(numeros[i] >= j * (maior / qtdBaldes)){//numeros[i] >= j * 1
 				baldes[j].itens[baldes[j].qtdItens] = numeros[i];//j == posicaoBalde
