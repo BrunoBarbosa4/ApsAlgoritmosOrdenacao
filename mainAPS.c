@@ -173,7 +173,7 @@ int geraNumeros() {
 	
 	numeros = (int *)malloc(tamanhoVetor * sizeof(int));
 	
-	srand(314159976);//srand(time(NULL));//srand(314159976);
+	srand(time(NULL));
 	int valorMaximo = 1000;//Os números aleatórios serão gerados de 0 até 100
 	for (int i = 0; i < tamanhoVetor; i++){
 		numeros[i] = rand() % valorMaximo + 1;
