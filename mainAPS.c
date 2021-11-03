@@ -8,6 +8,9 @@
 
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
+#define MENU_ESCOLHER_NUM 1
+#define MENU_METODOS_ORDENACAO 2
+
 typedef struct{
 	char nome[20];
 	float tempoExecucao;
@@ -34,115 +37,139 @@ int main(int argc, char *argv[]) {
 	struct timeval fim;
 	
 	int escolha = -1;
+	int menu = MENU_ESCOLHER_NUM;//Define o menu que deve exibir depois de chegar ao finale reornar
 	
 	system("color 0a");//Deixa a cor da fonte verde
 	
-	// Escolhendo se o usuário que irá digitar os números ou serão gerados aleatoriamente.
-	while (escolha < 0 || escolha > 1) {
-		printf("Para começar você deve escolher se os números serão aleatórios, ou você que irá digitá-los: (Obs: Escolha 0 ou 1)");
-		printf("\n(0) - Números aleatórios");
-		printf("\n(1) - Números digitados\n");
+	do{
 		
-		scanf("%d", &escolha);
-	}
-	
-	switch ( escolha ) {
+		if(menu == MENU_ESCOLHER_NUM){
+			
+			// Escolhendo se o usuário que irá digitar os números ou serão gerados aleatoriamente.
+			while (escolha < 1 || escolha > 2) {
+				printf("Para começar você deve escolher se os números serão aleatórios, ou você que irá digitá-los: (Obs: Escolha 0 ou 1)");
+				printf("\n(1) - Números aleatórios");
+				printf("\n(2) - Números digitados\n");
+				
+				scanf("%d", &escolha);
+			}
+			
+			switch ( escolha ) {
+				
+			case 1 :
+		    geraNumeros();
+		    break;	
+				
+		    case 2 :
+		    recebendoNumeros();
+		    break;
+		    
+		    default :
+		    printf ("Erro inesperado: Valor invalido!\n");
+		  }	
+		  
+		}
 		
-	case 0 :
-    geraNumeros();
-    break;	
+	  	escolha = -1;
 		
-    case 1 :
-    recebendoNumeros();
-    break;
-    
-    default :
-    printf ("Erro inesperado: Valor invalido!\n");
-  }	
-  
-  	escolha = -1;
-	
-	// Escolhendo o método de ordenação
-	while (escolha < 1 || escolha > 9) {
-		printf("\nEscolha uma opção de algoritmo para  realizar a ordenação: (Obs: 1 à 9)");
-		printf("\n(1) - Método BubbleSort");
-		printf("\n(2) - Método QuickSort ");
-		printf("\n(3) - Método InsertionSort");
-		printf("\n(4) - Método BinaryInsertionSort");
-		printf("\n(5) - Método SelectionSort");
-		printf("\n(6) - Método HeapSort");
-		printf("\n(7) - Método MergeSort ");
-		printf("\n(8) - Método BucketSort");
-		printf("\n(9) - Todos (verificar a performance)\n");
+		// Escolhendo o método de ordenação
+		while (escolha < 1 || escolha > 9) {
+			printf("\nEscolha uma opção de algoritmo para  realizar a ordenação: (Obs: 1 à 9)");
+			printf("\n(1) - Método BubbleSort");
+			printf("\n(2) - Método QuickSort ");
+			printf("\n(3) - Método InsertionSort");
+			printf("\n(4) - Método BinaryInsertionSort");
+			printf("\n(5) - Método SelectionSort");
+			printf("\n(6) - Método HeapSort");
+			printf("\n(7) - Método MergeSort ");
+			printf("\n(8) - Método BucketSort");
+			printf("\n(9) - Todos (verificar a performance)\n");
+			
+			scanf("%d", &escolha);
+		}
 		
-		scanf("%d", &escolha);
-	}
-	
-	gettimeofday(&inicio, 0);
-	
-	switch ( escolha ) {
-	
-	    case 1 :
-		    printf ("\nMétodo BubbleSort\n");
-		    bubbleSort();
-		    break;
-	    
-	    case 2 :
-		    printf ("\nMétodo QuickSort\n");
-		    quickSort(numeros, 0, tamanhoVetor - 1); //Seleciono o primeiro elemento do vetor até o último
-		    break;
-	    
-	    case 3 :
-		    printf ("\nMétodo InsertionSort\n");
-		    insertionSort(numeros, tamanhoVetor);
-		    break;
-	    
-	    case 4 :
-		    printf ("\nMétodo BinaryInsertionSort\n");
-		    binaryInsertionSort();
-		    break;
-	    
-	    case 5 :
-		    printf ("\nMétodo SelectionSort\n");
-		    selectionSort();
-		    break;
-	    
-	    case 6 :
-		    printf ("\nMétodo HeapSort\n");
-		    heapSort(numeros, tamanhoVetor);
-		    break;
-	    
-	    case 7 :
-		    printf ("\nMétodo MergeSort\n");
-		    mergeSort(numeros, 0, tamanhoVetor - 1);
-		    break;
-	    
-	    case 8 :
-		    printf ("\nMétodo BucketSort\n");
-		    bucketSort(numeros, tamanhoVetor);
-		    break;
-	    
-	    case 9:
-	    	executarTodos();
-	    	break;
-	    
-	    default :
-	    printf ("Erro inesperado: Valor invalido!\n");
-	}
-	
-	if(escolha != 9){
-		gettimeofday(&fim, 0);
-		listarNumeros();
-		printf("\n\nTempo de execução: %f milissegundos (sem a parte de printar)\n", diferenca(inicio, fim));
-	}
+		gettimeofday(&inicio, 0);
+		
+		switch ( escolha ) {
+		
+		    case 1 :
+			    printf ("\nMétodo BubbleSort\n");
+			    bubbleSort();
+			    break;
+		    
+		    case 2 :
+			    printf ("\nMétodo QuickSort\n");
+			    quickSort(numeros, 0, tamanhoVetor - 1); //Seleciono o primeiro elemento do vetor até o último
+			    break;
+		    
+		    case 3 :
+			    printf ("\nMétodo InsertionSort\n");
+			    insertionSort(numeros, tamanhoVetor);
+			    break;
+		    
+		    case 4 :
+			    printf ("\nMétodo BinaryInsertionSort\n");
+			    binaryInsertionSort();
+			    break;
+		    
+		    case 5 :
+			    printf ("\nMétodo SelectionSort\n");
+			    selectionSort();
+			    break;
+		    
+		    case 6 :
+			    printf ("\nMétodo HeapSort\n");
+			    heapSort(numeros, tamanhoVetor);
+			    break;
+		    
+		    case 7 :
+			    printf ("\nMétodo MergeSort\n");
+			    mergeSort(numeros, 0, tamanhoVetor - 1);
+			    break;
+		    
+		    case 8 :
+			    printf ("\nMétodo BucketSort\n");
+			    bucketSort(numeros, tamanhoVetor);
+			    break;
+		    
+		    case 9:
+		    	executarTodos();
+		    	break;
+		    
+		    default :
+		    printf ("Erro inesperado: Valor invalido!\n");
+		}
+		
+		if(escolha != 9){
+			gettimeofday(&fim, 0);
+			listarNumeros();
+			printf("\n\nTempo de execução: %f milissegundos (sem a parte de printar)\n", diferenca(inicio, fim));
+		}
+		
+		//Exibe o menu que reotrna ao menu de escolha de números, ou menu de escolha de métodos de ordenação, ou sai do programa
+		//menu = 0;
+		printf("\n\n(1) - Escolher números novamente");
+		printf("\n(2) - Escolher método de ordenação");
+		printf("\n(3) - Sair\n");
+		scanf("%d", &menu);
+		
+		if(menu == MENU_ESCOLHER_NUM)
+			system("cls");
+		else
+			printf("\n");
+			
+	}while((menu == MENU_ESCOLHER_NUM) || (menu == MENU_METODOS_ORDENACAO));
 	
 	return 0;
 }
 
 // Funções de gerar números aleatórios e de receber números do usuário
 int geraNumeros() {
-	printf("Quantos números deseja que sejam gerados?\n");
-	scanf("%d", &tamanhoVetor);
+	tamanhoVetor = 1;
+	do{
+		printf("Quantos números deseja que sejam gerados?\n");
+		scanf("%d", &tamanhoVetor);
+	} while (tamanhoVetor <= 0);
 	
 	numeros = (int *)malloc(tamanhoVetor * sizeof(int));
 	
@@ -158,8 +185,11 @@ int geraNumeros() {
 }
 
 int recebendoNumeros() {
-	printf("Quantos números deseja escrever?\n");
-	scanf("%d", &tamanhoVetor);
+	tamanhoVetor = 1;
+	do{
+		printf("Quantos números deseja escrever?\n");
+		scanf("%d", &tamanhoVetor);
+	} while (tamanhoVetor <= 0);
 	
 	numeros = (int *)malloc(tamanhoVetor * sizeof(int));
 	
@@ -174,11 +204,11 @@ int recebendoNumeros() {
 }
 
 void listarNumeros(){
-	printf("\nNúmeros do vetor:\n");
+	printf("\nNúmeros ordenados do vetor:\n");
 	for(int i = 0;i < tamanhoVetor;i++){
 		printf("%d", numeros[i]);
 		
-		if(i+1 < tamanhoVetor){    // if para impedir que fique uma vírgula depois de já ter mostrado todos os números
+		if(i+1 < tamanhoVetor){// if para impedir que fique uma vírgula depois de já ter mostrado todos os números
 			printf(", ");
 		}
 		
@@ -190,7 +220,7 @@ void bubbleSort(){
 	bool ordenada;
 	
 	do{
-		ordenada = true; //está ordenada até que se prove o contrário
+		ordenada = true;//está ordenada até que se prove o contrário
 		
 		for(int i = 0; i < tamanhoVetor - 1; i++){
 			
@@ -208,16 +238,16 @@ void quickSort(int *numeros, int comeco, int fim) {
      
     int contEsquerda = comeco;
     int contDireita = fim;
-    int pivo = numeros[(comeco + fim) / 2];  //Defini o pivô sendo o número do meio do vetor
+    int pivo = numeros[(comeco + fim) / 2];//Defini o pivô sendo o número do meio do vetor
      
     while(contEsquerda <= contDireita) {
-        while(numeros[contEsquerda] < pivo && contEsquerda < fim) {  //Enquanto não houver um número maior ou igual ao pivô, o contador da esquerda vai aumentando
+        while(numeros[contEsquerda] < pivo && contEsquerda < fim) {//Enquanto não houver um número maior ou igual ao pivô, o contador da esquerda vai aumentando
             contEsquerda++;
         }
-        while(numeros[contDireita] > pivo && contDireita > comeco) { //Enquanto não houver um número menor ou igual ao pivô, o contador da direita vai diminuindo
+        while(numeros[contDireita] > pivo && contDireita > comeco) {//Enquanto não houver um número menor ou igual ao pivô, o contador da direita vai diminuindo
             contDireita--;
         }
-        if(contEsquerda <= contDireita) { 
+        if(contEsquerda <= contDireita) {
             trocar(contEsquerda, contDireita);
             contEsquerda++;
             contDireita--;
@@ -253,9 +283,31 @@ void insertionSort(int *vetor, int tamanhoVetor){
 
 
 void binaryInsertionSort(){
+	int atual;
+	int posEsquerda;
+	int posDireita;
 	
-	
-	
+	for(int i = 0; i < tamanhoVetor; i++){
+		atual = numeros[i];
+		posEsquerda = 0;
+		posDireita = i;
+		
+		while(posEsquerda < posDireita){
+			int meio = (posEsquerda + posDireita) / 2;//Procura na metade dos valores que estão a sua esquerda
+			
+			if(numeros[meio] <= atual)
+				posEsquerda = meio + 1;
+			else
+				posDireita = meio;
+		}
+		
+		int j = i;
+		while(j  > posDireita){
+			numeros[j] = numeros[j - 1];
+			j--;
+		}
+		numeros[posDireita] = atual;
+	}
 }
 
 void selectionSort(){
@@ -506,11 +558,11 @@ void executarTodos(){
 
 void listarAlgoritmos(algoritmo *algs, int qtdAlgoritmos){
 	printf("\n\nAlgoritmos ordenados pelo tempo de execução: \n");
-	printf("\n\t| Posição | \tAlgoritmo\t |   tempo\t   |\n");//
-	printf("\t|-----------------------------------------------|\n");
+	printf("\n\t| Posição | \tAlgoritmo\t |\t\ttempo\t     |\n");//
+	printf("\t|------------------------------------------------------------|\n");
 	for(int i = 0; i < qtdAlgoritmos; i++){
 		//printf(" %d Algoritmo: %s\t tempo: %.2f ms.\n", (i + 1), algs[i].nome, algs[i].tempoExecucao);
-		printf("\t|    %d    | %s\t | %f ms.        |\n", (i + 1), algs[i].nome, algs[i].tempoExecucao);
+		printf("\t|    %d    | %s\t | %f \tmilissegundos|\n", (i + 1), algs[i].nome, algs[i].tempoExecucao);
 	}
 }
 
