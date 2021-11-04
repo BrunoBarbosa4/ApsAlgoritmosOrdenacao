@@ -204,7 +204,7 @@ int recebendoNumeros() {
 }
 
 void listarNumeros(){
-	printf("\nNúmeros ordenados do vetor:\n");
+	printf("\nNúmeros do vetor:\n");
 	for(int i = 0;i < tamanhoVetor;i++){
 		printf("%d", numeros[i]);
 		
