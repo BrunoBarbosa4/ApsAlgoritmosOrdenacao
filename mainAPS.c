@@ -160,6 +160,7 @@ int main(int argc, char *argv[]) {
 			
 	}while((menu == MENU_ESCOLHER_NUM) || (menu == MENU_METODOS_ORDENACAO));
 	
+	free(numeros);
 	return 0;
 }
 
@@ -173,8 +174,14 @@ int geraNumeros() {
 	
 	numeros = (int *)malloc(tamanhoVetor * sizeof(int));
 	
+	if (numeros == NULL){  //Erro de falta de espaço para armazenar o vetor
+		printf("\nERRO: Não foi possível criar o vetor!");
+		system("pause");
+		exit(1);
+	}
+	
 	srand(time(NULL));
-	int valorMaximo = 1000;//Os números aleatórios serão gerados de 0 até 100
+	int valorMaximo = 1000;//Os números aleatórios serão gerados de 0 até 1000
 	for (int i = 0; i < tamanhoVetor; i++){
 		numeros[i] = rand() % valorMaximo + 1;
 	}
@@ -192,6 +199,12 @@ int recebendoNumeros() {
 	} while (tamanhoVetor <= 0);
 	
 	numeros = (int *)malloc(tamanhoVetor * sizeof(int));
+	
+	if (numeros == NULL){  //Erro de falta de espaço para armazenar o vetor
+		printf("\nERRO: Não foi possível criar o vetor!");
+		system("pause");
+		exit(1);
+	}
 	
 	for (int i = 0; i < tamanhoVetor; i++){
 		printf("Digite um número para o vetor: ");
@@ -466,7 +479,7 @@ void bucketSort(int *numeros, int tamanhoVetor){
 			posicaoBalde++;
 		}
 		
-		//free(baldes[i].itens);
+		free(baldes[i].itens);
 	}
 	
 }
@@ -554,6 +567,8 @@ void executarTodos(){
 	listarNumeros();
 	ordenarAlgoritmos(algs, qtdAlgoritmos);
 	listarAlgoritmos(algs, qtdAlgoritmos);
+	
+	free(copia);
 }
 
 void listarAlgoritmos(algoritmo *algs, int qtdAlgoritmos){
