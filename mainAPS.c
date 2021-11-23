@@ -88,47 +88,55 @@ int main(int argc, char *argv[]) {
 			scanf("%d", &escolha);
 		}
 		
-		gettimeofday(&inicio, 0);
+		
 		
 		switch ( escolha ) {
 		
 		    case 1 :
 			    printf ("\nMétodo BubbleSort\n");
+			    gettimeofday(&inicio, 0);
 			    bubbleSort();
 			    break;
 		    
 		    case 2 :
 			    printf ("\nMétodo QuickSort\n");
+			    gettimeofday(&inicio, 0);
 			    quickSort(numeros, 0, tamanhoVetor - 1); //Seleciono o primeiro elemento do vetor até o último
 			    break;
 		    
 		    case 3 :
 			    printf ("\nMétodo InsertionSort\n");
+			    gettimeofday(&inicio, 0);
 			    insertionSort(numeros, tamanhoVetor);
 			    break;
 		    
 		    case 4 :
 			    printf ("\nMétodo BinaryInsertionSort\n");
+			    gettimeofday(&inicio, 0);
 			    binaryInsertionSort();
 			    break;
 		    
 		    case 5 :
 			    printf ("\nMétodo SelectionSort\n");
+			    gettimeofday(&inicio, 0);
 			    selectionSort();
 			    break;
 		    
 		    case 6 :
 			    printf ("\nMétodo HeapSort\n");
+			    gettimeofday(&inicio, 0);
 			    heapSort(numeros, tamanhoVetor);
 			    break;
 		    
 		    case 7 :
 			    printf ("\nMétodo MergeSort\n");
+			    gettimeofday(&inicio, 0);
 			    mergeSort(numeros, 0, tamanhoVetor - 1);
 			    break;
 		    
 		    case 8 :
 			    printf ("\nMétodo BucketSort\n");
+			    gettimeofday(&inicio, 0);
 			    bucketSort(numeros, tamanhoVetor);
 			    break;
 		    
